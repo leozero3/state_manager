@@ -5,27 +5,27 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:state_manager/widgets/imc_gauge.dart';
 
-class ImcSetstatePage extends StatefulWidget {
+class ValueNotifierPage extends StatefulWidget {
+  const ValueNotifierPage({Key? key}) : super(key: key);
+
   @override
-  State<ImcSetstatePage> createState() => _ImcSetstatePageState();
+  _ValueNotifierPageState createState() => _ValueNotifierPageState();
 }
 
-class _ImcSetstatePageState extends State<ImcSetstatePage> {
+class _ValueNotifierPageState extends State<ValueNotifierPage> {
+
   final pesoEC = TextEditingController();
   final alturaEC = TextEditingController();
   final formKey = GlobalKey<FormState>();
-  double imc = 0.0;
+  var imc = ValueNotifier(0.0);
 
   Future<void> _calcularImc(
       {required double peso, required double altura}) async {
-    setState(() {
-      imc = 0;
-    });
-    await Future.delayed(Duration(seconds: 1));
 
-    setState(() {
-      imc = peso / pow(altura, 2);
-    });
+    imc.value = 0;
+    await Future.delayed(Duration(seconds: 1));
+    imc.value = peso / pow(altura, 2);
+
   }
 
   @override
@@ -34,6 +34,7 @@ class _ImcSetstatePageState extends State<ImcSetstatePage> {
     alturaEC.dispose();
     super.dispose();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +49,13 @@ class _ImcSetstatePageState extends State<ImcSetstatePage> {
             padding: const EdgeInsets.all(8),
             child: Column(
               children: [
-                ImcGauge(imc: imc),
+                ValueListenableBuilder<double>(
+                    builder: (_, imcValue, child) {
+
+                      return ImcGauge(imc: imcValue);
+                    },
+                valueListenable: imc,
+                ),
                 const SizedBox(height: 20),
                 TextFormField(
                   controller: pesoEC,
@@ -108,5 +115,5 @@ class _ImcSetstatePageState extends State<ImcSetstatePage> {
         ),
       ),
     );
-  }
+      }
 }
