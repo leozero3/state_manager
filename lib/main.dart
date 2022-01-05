@@ -9,7 +9,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Default State Manager',
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: HomePage(),
+      home: const HomePage(),
     );
   }
 }

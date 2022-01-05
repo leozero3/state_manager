@@ -23,11 +23,11 @@ class _ImcSetstatePageState extends State<ImcSetstatePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Imc SetState'),
+        title: const Text('Imc SetState'),
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.all(8),
+          padding: const EdgeInsets.all(8),
           child: Column(
             children: [
               SfRadialGauge(
@@ -70,7 +70,7 @@ class _ImcSetstatePageState extends State<ImcSetstatePage> {
                         label: 'Obesidade Grave',
                       ),
                     ],
-                    pointers: [
+                    pointers: const [
                       NeedlePointer(
                         value: 15,
                         enableAnimation: true,
@@ -79,10 +79,10 @@ class _ImcSetstatePageState extends State<ImcSetstatePage> {
                   ),
                 ],
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               TextFormField(
                 controller: pesoEC,
-                decoration: InputDecoration(labelText: 'Peso'),
+                decoration: const InputDecoration(labelText: 'Peso'),
                 keyboardType: TextInputType.number,
                 inputFormatters: [
                   CurrencyTextInputFormatter(
@@ -95,7 +95,7 @@ class _ImcSetstatePageState extends State<ImcSetstatePage> {
               ),
               TextFormField(
                 controller: alturaEC,
-                decoration: InputDecoration(labelText: 'Altura'),
+                decoration: const InputDecoration(labelText: 'Altura'),
                 keyboardType: TextInputType.number,
                 inputFormatters: [
                   CurrencyTextInputFormatter(
