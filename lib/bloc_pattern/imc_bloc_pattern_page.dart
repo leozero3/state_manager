@@ -1,8 +1,8 @@
-import 'dart:math';
 import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:state_manager/bloc_pattern/imc_bloc_pattern_controller.dart';
+import 'package:state_manager/bloc_pattern/imc_state.dart';
 import 'package:state_manager/widgets/imc_gauge.dart';
 
 class ImcBlocPatternPage extends StatefulWidget {
@@ -18,9 +18,6 @@ class _ImcBlocPatternPageState extends State<ImcBlocPatternPage> {
   final alturaEC = TextEditingController();
   final formKey = GlobalKey<FormState>();
 
-
-
-
   @override
   void dispose() {
     pesoEC.dispose();
@@ -28,7 +25,6 @@ class _ImcBlocPatternPageState extends State<ImcBlocPatternPage> {
     controller.dispose();
     super.dispose();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -43,8 +39,25 @@ class _ImcBlocPatternPageState extends State<ImcBlocPatternPage> {
             padding: const EdgeInsets.all(8),
             child: Column(
               children: [
-                ImcGauge(imc: 0),
+                StreamBuilder<ImcState>(
+                  stream: controller.imcOut,
+                  builder: (context, snapshot) {
+                    var imc = 0.0;
+                    imc = snapshot.data?.imc ?? 0;
+
+                    return ImcGauge(imc: imc);
+                  },
+                ),
                 const SizedBox(height: 20),
+                StreamBuilder<ImcState>(
+                  stream: controller.imcOut,
+                  builder: (context, snapshot) {
+                    return Visibility(
+                      visible: snapshot.data is ImcStateLoading,
+                      child: const CircularProgressIndicator(),
+                    );
+                  },
+                ),
                 TextFormField(
                   controller: pesoEC,
                   decoration: const InputDecoration(labelText: 'Peso'),
@@ -92,7 +105,7 @@ class _ImcBlocPatternPageState extends State<ImcBlocPatternPage> {
                       double peso = formatter.parse(pesoEC.text) as double;
                       double altura = formatter.parse(alturaEC.text) as double;
 
-                      //_calcularImc(peso: peso, altura: altura);
+                      controller.calcularImc(peso: peso, altura: altura);
                     }
                   },
                   child: const Text('Calcular IMC'),
@@ -103,6 +116,5 @@ class _ImcBlocPatternPageState extends State<ImcBlocPatternPage> {
         ),
       ),
     );
-
   }
 }
